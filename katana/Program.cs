@@ -1,12 +1,11 @@
-﻿using Microsoft.Owin.Hosting;
-using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace kantana
 {
-    using System.Collections;
+    using Microsoft.Owin.Hosting;
+    using Owin;
     using System.IO;
     using AppFunc = Func<IDictionary<string, object>, Task>; //own using statement
 
@@ -19,6 +18,7 @@ namespace kantana
             using (WebApp.Start<Startup>(uri))
             {
                 Console.WriteLine("Started!");
+                Console.WriteLine("Enter http://localhost:8080/ in your browser to configure OWN");
                 Console.ReadKey();
                 Console.WriteLine("Stopping!");
             }
@@ -35,17 +35,17 @@ namespace kantana
 
                 Console.WriteLine("Response: " + environment.Response.StatusCode);
 
-                //foreach (var pair in environment.Environment)
-                //{
-                //    Console.WriteLine("{0}:{1}", pair.Key, pair.Value);
-                //}
+                foreach (var pair in environment.Environment)
+                {
+                    Console.WriteLine("{0}:{1}", pair.Key, pair.Value);
+                }
 
                 await next();
             });
 
             //ConfigureWebApi(app);
 
-            //app.UseWelcomePage(); owin welcome page
+            app.UseWelcomePage(); //owin welcome page
             app.UseTestComponent();
 
         }
@@ -74,7 +74,7 @@ namespace kantana
             var response = environment["owin.ResponseBody"] as Stream;
             using (var writer = new StreamWriter(response))
             {
-                await writer.WriteAsync("MSP UDOH");
+                await writer.WriteAsync("AppFunc Test");
             }
         }
     }
